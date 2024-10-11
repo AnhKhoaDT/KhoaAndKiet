@@ -1,9 +1,21 @@
 const mongoose = require('mongoose');
 
 const ticketSchema = new mongoose.Schema({
-    userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-    showTimeId: { type: mongoose.Schema.Types.ObjectId, ref: 'ShowTime' },
-    seatId: { type: mongoose.Schema.Types.ObjectId, ref: 'Seat' },
+    userId: { 
+        type: mongoose.Schema.Types.ObjectId,
+         ref: 'User',
+        required:true 
+    },
+    showTimeId: { 
+        type: mongoose.Schema.Types.ObjectId, 
+        ref: 'ShowTime', 
+        required:true
+    },
+    seatId: { 
+        type: mongoose.Schema.Types.ObjectId,
+         ref: 'Seat',
+         required:true
+    },
     price: {
         type: Number,
         required: true
@@ -22,6 +34,6 @@ const ticketSchema = new mongoose.Schema({
     timestamps: true // createdAt, updatedAt
 });
  
-const Ticket = mongoose.model('Ticket', userSchema,'Ticket');
+const Ticket = mongoose.model('Ticket', ticketSchema,'Ticket');
 
 module.exports = Ticket;

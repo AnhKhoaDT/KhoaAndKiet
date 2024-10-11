@@ -1,3 +1,5 @@
+
+// dữ liệu nó không thay đổi nên ta dùng controller chung để sử lý cho dễ kiểm soát.
 const mongoose = require('mongoose');
 
 const theaterSchema = new mongoose.Schema({

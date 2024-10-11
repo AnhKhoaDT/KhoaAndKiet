@@ -1,11 +1,9 @@
 const User = require('../models/user.model');
-const mongoose = require('mongoose');
-
 
 const createUser = async (req, res) => {
     const userData = req.body;
-    if(!userData.id || !userData.name) {  
-        return res.status(400).json({sucess:false,message: "Invalid data"});
+    if (!userData.name || !userData.userName || !userData.dob || !userData.phone || !userData.email || !userData.password) {
+        return res.status(400).json({ success: false, message: "Invalid data" });
     }
     const newUser = new User(userData);
     try {
@@ -16,14 +14,53 @@ const createUser = async (req, res) => {
     }
 };
 
-const deleteUser = (async(req, res) => {
+const deleteUser = async (req, res) => {
     const id = req.params.id;
     try {
         const user = await User.findByIdAndDelete(id);
+        if (!user) {
+            return res.status(404).json({ success: false, message: "User not found" });
+        }
         res.status(200).json({ success: true, data: {} });
     } catch (error) {
         res.status(500).json({ success: false, message: error.message });
     }
-});
+};
 
-module.exports = { createUser, deleteUser };
+const getUsers = async (req, res) => {
+    try {
+        const users = await User.find();
+        res.status(200).json({ success: true, data: users });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+};
+
+const getUserById = async (req, res) => {
+    const id = req.params.id;
+    try {
+        const user = await User.findById(id);
+        if (!user) {
+            return res.status(404).json({ success: false, message: "User not found" });
+        }
+        res.status(200).json({ success: true, data: user });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+};
+
+const updateUser = async (req, res) => {
+    const id = req.params.id;
+    const userData = req.body;
+    try {
+        const user = await User.findByIdAndUpdate(id, userData, { new: true, runValidators: true });
+        if (!user) {
+            return res.status(404).json({ success: false, message: "User not found" });
+        }
+        res.status(200).json({ success: true, data: user });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+};
+
+module.exports = { createUser, deleteUser, getUsers, getUserById, updateUser };
