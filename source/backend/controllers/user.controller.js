@@ -5,6 +5,11 @@ const createUser = async (req, res) => {
     if (!userData.name || !userData.userName || !userData.dob || !userData.phone || !userData.email || !userData.password) {
         return res.status(400).json({ success: false, message: "Invalid data" });
     }
+    // Đảm bảo rằng các trường roles được xử lý đúng
+    if (!userData.roles) {
+        userData.roles = ['customer']; // Mặc định là 'customer' nếu không chỉ định
+    }
+  
     const newUser = new User(userData);
     try {
         await newUser.save();
@@ -27,7 +32,7 @@ const deleteUser = async (req, res) => {
     }
 };
 
-const getUsers = async (req, res) => {
+const getUsers = async (req, res) => {// tìm tất cả người dùng
     try {
         const users = await User.find();
         res.status(200).json({ success: true, data: users });
@@ -36,7 +41,7 @@ const getUsers = async (req, res) => {
     }
 };
 
-const getUserById = async (req, res) => {
+const getUserById = async (req, res) => {// tìm kiếm 1 người theo id
     const id = req.params.id;
     try {
         const user = await User.findById(id);

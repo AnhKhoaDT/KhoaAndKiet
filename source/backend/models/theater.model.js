@@ -3,7 +3,7 @@
 const mongoose = require('mongoose');
 
 const theaterSchema = new mongoose.Schema({
-    cinemaId: { type: mongoose.Schema.Types.ObjectId, ref: 'Cinema' },
+
 
     name: {
         type: String,
@@ -12,6 +12,16 @@ const theaterSchema = new mongoose.Schema({
     totalSeats: {
         type: Number,
         required: true
+    },
+    cinema:{
+        name: {
+            type: String,
+            required: true
+        },
+        location: {
+            type: String,
+            required: true
+        }
     }
    
 },
