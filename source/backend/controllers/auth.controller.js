@@ -44,18 +44,20 @@ const register = async (req, res) => {
 };
 
 const login = async (req, res) => {
-    const { emailOrUserName, password } = req.body;
+    const loginData = req.body;
+    console.log(loginData);
     try {
         const user = await User.findOne({
-            $or: [{ email: emailOrUserName }, { userName: emailOrUserName }]
+            $or: [{ email: loginData.email }, { userName: loginData.userName }]
         });
+        console.log(user);
         if (!user) {
-            return res.status(400).json({ success: false, message: 'Invalid credentials' });
+            return res.status(400).json({ success: false, message: 'Invalid userName' });
         }
 
-        const isMatch = await bcrypt.compare(password, user.password);
+        const isMatch = await bcrypt.compare(loginData.password, user.password);
         if (!isMatch) {
-            return res.status(400).json({ success: false, message: 'Invalid credentials' });
+            return res.status(400).json({ success: false, message: 'Invalid password' });
         }
 
         // Tạo mã xác nhận
